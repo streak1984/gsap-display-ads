@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- brand: acme -->
 <head>
   <meta charset="utf-8">
   <meta name="ad.size" content="width=300,height=250">
@@ -25,12 +26,13 @@
       height: 250px;
       overflow: hidden;
       border: 1px solid #ccc;
-      background: #ffffff;
       cursor: pointer;
+      /* Brand: typography.fontFamily */
       font-family: Arial, Helvetica, sans-serif;
     }
 
     /* Background panel */
+    /* Brand: colors.background + colors.secondary (gradient) */
     .bg-panel {
       position: absolute;
       top: 0;
@@ -40,58 +42,71 @@
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     }
 
-    /* Logo — top left */
+    /* Logo — Brand: logo.placement (top-left), colors.primary */
     .logo {
       position: absolute;
       top: 16px;
       left: 16px;
       font-size: 14px;
       font-weight: bold;
+      /* Brand: colors.primary */
       color: #e94560;
       letter-spacing: 2px;
       text-transform: uppercase;
       opacity: 0;
     }
 
-    /* Headline — center */
+    /* Headline */
     .headline {
       position: absolute;
       top: 60px;
       left: 16px;
       right: 16px;
       font-size: 24px;
+      /* Brand: typography.headlineWeight */
       font-weight: bold;
+      /* Brand: colors.text */
       color: #ffffff;
+      /* Brand: typography.headlineTransform */
+      text-transform: none;
       line-height: 1.2;
       opacity: 0;
       transform: translateY(20px);
     }
 
-    /* Subheadline — below headline */
+    /* Subheadline */
     .subheadline {
       position: absolute;
       top: 130px;
       left: 16px;
       right: 16px;
       font-size: 14px;
+      /* Brand: typography.bodyWeight */
+      font-weight: normal;
+      /* Brand: colors.textSecondary */
       color: #a2a2b8;
       line-height: 1.4;
       opacity: 0;
       transform: translateY(15px);
     }
 
-    /* CTA button — bottom right */
+    /* CTA button */
     .cta {
       position: absolute;
       bottom: 20px;
       right: 16px;
+      /* Brand: colors.cta */
       background: #e94560;
+      /* Brand: colors.ctaText */
       color: #ffffff;
       font-size: 13px;
       font-weight: bold;
       padding: 10px 24px;
+      /* Brand: cta.borderRadius */
       border-radius: 4px;
+      /* Brand: cta.textTransform */
       text-transform: uppercase;
+      /* Brand: cta.letterSpacing */
       letter-spacing: 1px;
       opacity: 0;
       transform: scale(0.9);
@@ -101,9 +116,11 @@
 <body>
   <div id="ad-container">
     <div class="bg-panel"></div>
+    <!-- Brand: logo.type=text, logo.text -->
     <div class="logo">ACME</div>
     <div class="headline">Big Spring Sale — Up to 50% Off</div>
     <div class="subheadline">Premium products at unbeatable prices. Limited time only.</div>
+    <!-- Brand: cta.defaultText -->
     <div class="cta">Shop Now</div>
   </div>
 

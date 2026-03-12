@@ -140,11 +140,39 @@ output/acme-spring-sale/728x90/index.html
 
 ---
 
+## Brand Profiles
+
+Brand profiles store all visual identity rules for a brand, ensuring every generated ad is on-brand by default.
+
+- **Location**: `${CLAUDE_PLUGIN_ROOT}/brands/<brand-slug>.json`
+- **Schema reference**: `${CLAUDE_PLUGIN_ROOT}/brands/BRAND_SCHEMA.md`
+
+### Usage Priority
+
+When generating or modifying ads, resolve styling values in this order:
+
+1. **Brand profile values** — always the primary source when a profile exists
+2. **User overrides** — explicit per-request changes the user asks for
+3. **Never use generic defaults** when a brand profile exists (no more "professional blue/white")
+
+### How Each Skill Uses Brand Profiles
+
+| Skill | Behavior |
+|-------|----------|
+| `/setup-brand` | Creates or updates a brand profile interactively |
+| `/create-ad` | Loads the brand profile first, maps all colors/typography/CTA/logo to CSS, embeds `<!-- brand: <slug> -->` comment |
+| `/resize-ad` | Treats the brand profile as the authoritative style source (more reliable than parsing source HTML) |
+| `/validate-ad` | Runs brand compliance checks alongside Google compliance checks |
+| `/export-ad` | Runs both `validate.sh` and `validate-brand.sh` before bundling |
+
+---
+
 ## Shell Script References
 
 Scripts are located relative to the plugin root. In skills, use `${CLAUDE_PLUGIN_ROOT}` for portability:
 
-- **Validate**: `${CLAUDE_PLUGIN_ROOT}/scripts/validate.sh <ad-directory>`
+- **Validate (Google compliance)**: `${CLAUDE_PLUGIN_ROOT}/scripts/validate.sh <ad-directory>`
+- **Validate (brand compliance)**: `${CLAUDE_PLUGIN_ROOT}/scripts/validate-brand.sh <ad-directory> <brand-profile.json>`
 - **Bundle**: `${CLAUDE_PLUGIN_ROOT}/scripts/bundle.sh <ad-directory> [output.zip]`
 
 ---

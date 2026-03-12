@@ -23,9 +23,33 @@ If the user doesn't specify which ad, use `Glob` to list all available ads in `o
 - **"Export the 300x250"** — bundle a specific size
 - **"Export all sizes of [ad-name]"** — bundle all sizes of a specific ad
 
-## Step 2: Bundle Each Ad
+## Step 2: Pre-Export Validation
 
-For each ad size to export, run the bundle script:
+Before bundling, run both compliance checks on each ad to catch issues early.
+
+### Google Compliance
+
+```bash
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/validate.sh output/<ad-name>/<width>x<height>
+```
+
+### Brand Compliance
+
+For each ad, detect the brand profile:
+
+1. Read the ad's `index.html` and look for a `<!-- brand: <slug> -->` comment
+2. If found, run the brand compliance checker:
+   ```bash
+   bash ${CLAUDE_PLUGIN_ROOT}/scripts/validate-brand.sh output/<ad-name>/<width>x<height> ${CLAUDE_PLUGIN_ROOT}/brands/<slug>.json
+   ```
+3. If no brand comment found, skip brand validation for that ad
+
+**Google compliance failures block export** — these must be fixed first.
+**Brand compliance failures produce a warning** but do not block export — the user may intentionally want to override brand rules for a specific campaign.
+
+## Step 3: Bundle Each Ad
+
+For each ad size that passes Google compliance, run the bundle script:
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/scripts/bundle.sh output/<ad-name>/<width>x<height>
@@ -37,7 +61,7 @@ This will:
 3. Check ZIP size (must be ≤ 150KB)
 4. Report pass/fail
 
-## Step 3: Handle Failures
+## Step 4: Handle Failures
 
 If a bundle fails the size check:
 
@@ -49,18 +73,19 @@ If a bundle fails the size check:
    - If images are small (< 5KB), consider base64 inlining them to reduce file count
 3. **Offer to fix**: If the issue is fixable (e.g., images can be optimized), offer to help
 
-## Step 4: Summary
+## Step 5: Summary
 
 After all bundles are created, provide a summary table:
 
-| Ad | Size | ZIP File | File Size | Status |
-|----|------|----------|-----------|--------|
-| acme-sale | 300x250 | output/acme-sale/acme-sale-300x250.zip | 12KB | Ready |
-| acme-sale | 728x90 | output/acme-sale/acme-sale-728x90.zip | 11KB | Ready |
+| Ad | Size | ZIP File | File Size | Google | Brand | Status |
+|----|------|----------|-----------|--------|-------|--------|
+| acme-sale | 300x250 | output/acme-sale/acme-sale-300x250.zip | 12KB | Pass | Pass | Ready |
+| acme-sale | 728x90 | output/acme-sale/acme-sale-728x90.zip | 11KB | Pass | Warn | Ready (with brand warnings) |
 
 Include:
 - Total number of ZIPs created
 - Any that failed and why
+- Brand compliance warnings (if any)
 - Reminder that these ZIPs can be uploaded directly to Google Ads (Campaign Manager, Display & Video 360, or Google Ads)
 
 ## Upload Instructions

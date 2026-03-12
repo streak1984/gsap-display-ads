@@ -1,4 +1,7 @@
 **/output/*
 !**/output/.gitkeep
+**/brands/*
+!**/brands/.gitkeep
+!**/brands/BRAND_SCHEMA.md
 .DS_Store
 *.zip
