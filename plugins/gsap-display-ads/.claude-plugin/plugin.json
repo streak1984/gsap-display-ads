@@ -1,0 +1,9 @@
+{
+  "name": "gsap-display-ads",
+  "version": "1.0.0",
+  "description": "Generate Google Display Ads with GSAP animations from natural language descriptions",
+  "author": {
+    "name": "Thomas Nesmyhre"
+  },
+  "keywords": ["google-ads", "display-ads", "gsap", "html5", "animation"]
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="ad.size" content="width=300,height=250">
+  <title>Example Ad — 300x250</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 300px;
+      height: 250px;
+      overflow: hidden;
+    }
+
+    /* Ad container — click target, visual boundary */
+    #ad-container {
+      position: relative;
+      width: 300px;
+      height: 250px;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background: #ffffff;
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Background panel */
+    .bg-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    /* Logo — top left */
+    .logo {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #e94560;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0;
+    }
+
+    /* Headline — center */
+    .headline {
+      position: absolute;
+      top: 60px;
+      left: 16px;
+      right: 16px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffffff;
+      line-height: 1.2;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* Subheadline — below headline */
+    .subheadline {
+      position: absolute;
+      top: 130px;
+      left: 16px;
+      right: 16px;
+      font-size: 14px;
+      color: #a2a2b8;
+      line-height: 1.4;
+      opacity: 0;
+      transform: translateY(15px);
+    }
+
+    /* CTA button — bottom right */
+    .cta {
+      position: absolute;
+      bottom: 20px;
+      right: 16px;
+      background: #e94560;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 10px 24px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  </style>
+</head>
+<body>
+  <div id="ad-container">
+    <div class="bg-panel"></div>
+    <div class="logo">ACME</div>
+    <div class="headline">Big Spring Sale — Up to 50% Off</div>
+    <div class="subheadline">Premium products at unbeatable prices. Limited time only.</div>
+    <div class="cta">Shop Now</div>
+  </div>
+
+  <!-- GSAP from Google CDN — does NOT count toward 150KB limit -->
+  <script src="https://s0.2mdn.net/ads/studio/cached_libs/gsap_3.14.1_min.js"></script>
+
+  <script>
+    // clickTag — required by Google Ads
+    var clickTag = "https://www.google.com";
+
+    document.getElementById("ad-container").addEventListener("click", function() {
+      window.open(clickTag);
+    });
+
+    // Animation timeline
+    // Structure: Intro (0-3s) → Messaging (3-20s) → End Frame (20-30s, static)
+    var tl = gsap.timeline();
+
+    // --- Intro: 0–3s ---
+    tl.addLabel("intro")
+      // Background panel fades in
+      .from(".bg-panel", {
+        opacity: 0,
+        duration: 1,
+        ease: "power2.out"
+      })
+      // Logo fades in
+      .to(".logo", {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out"
+      }, 0.5)
+
+    // --- Messaging: 3–20s ---
+      .addLabel("messaging", 3)
+      // Headline slides up and fades in
+      .to(".headline", {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "messaging")
+      // Subheadline follows
+      .to(".subheadline", {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "messaging+=1.5")
+
+    // --- End Frame: 20–30s (static after CTA appears) ---
+      .addLabel("endframe", 6)
+      // CTA scales up and fades in — remains static after this
+      .to(".cta", {
+        opacity: 1,
+        scale: 1,
+        duration: 0.5,
+        ease: "back.out(1.7)"
+      }, "endframe");
+  </script>
+</body>
+</html>
